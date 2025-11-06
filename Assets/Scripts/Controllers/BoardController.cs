@@ -1,10 +1,14 @@
-
 using System.Collections.Generic;
 using MemoryGame.Config;
 using MemoryGame.Events;
 using UnityEngine;
+
 namespace MemoryGame.Controller
 {
+    /// <summary>
+    /// Controller responsible for building and managing the game board.
+    /// Handles card placement, layout, and board configuration.
+    /// </summary>
     public class BoardController
     {
         private readonly Transform _root;
@@ -13,8 +17,19 @@ namespace MemoryGame.Controller
         private readonly ObjectPool<CardController> _pool;
         private readonly BoardFrame _frame; // NEW
 
+        /// <summary>
+        /// List of all card controllers on the board
+        /// </summary>
         public List<CardController> Cards { get; } = new List<CardController>();
 
+        /// <summary>
+        /// Constructor for the BoardController
+        /// </summary>
+        /// <param name="root">Transform to parent all cards under</param>
+        /// <param name="cfg">Game configuration settings</param>
+        /// <param name="set">Card set containing available card faces</param>
+        /// <param name="pool">Object pool for card controllers</param>
+        /// <param name="frame">Optional board frame for layout constraints</param>
         public BoardController(Transform root, GameConfig cfg, CardSet set, ObjectPool<CardController> pool, BoardFrame frame = null)
         {
             _root = root; _cfg = cfg; _set = set; _pool = pool; _frame = frame;
@@ -24,6 +39,8 @@ namespace MemoryGame.Controller
         /// Build or rebuild the board using only the required number of cards.
         /// Reuses already-instantiated cards when possible, and returns extras to the pool.
         /// </summary>
+        /// <param name="rows">Number of rows in the board grid</param>
+        /// <param name="cols">Number of columns in the board grid</param>
         public void Build(int rows, int cols)
         {
             int totalSlots = rows * cols;
@@ -80,6 +97,13 @@ namespace MemoryGame.Controller
             GameEvents.RaiseRemainingPairsChanged(pairs);
         }
 
+        /// <summary>
+        /// Layout cards within a defined rectangular area
+        /// </summary>
+        /// <param name="innerWorld">The rectangular area to layout cards within</param>
+        /// <param name="rows">Number of rows in the grid</param>
+        /// <param name="cols">Number of columns in the grid</param>
+        /// <param name="ids">List of card IDs to assign</param>
         private void LayoutInsideRect(Rect innerWorld, int rows, int cols, List<string> ids)
         {
             int totalSlots = rows * cols;
@@ -127,6 +151,11 @@ namespace MemoryGame.Controller
             }
         }
 
+        /// <summary>
+        /// Gets the natural size of a card at scale 1
+        /// </summary>
+        /// <param name="card">The card controller to measure</param>
+        /// <returns>The natural size of the card</returns>
         private static Vector2 GetCardNaturalSize(CardController card)
         {
             var view = card.view;
@@ -150,6 +179,9 @@ namespace MemoryGame.Controller
             return new Vector2(1f, 1.4f);
         }
 
+        /// <summary>
+        /// Clears all cards from the board and returns them to the pool
+        /// </summary>
         public void ClearAll()
         {
             for (int i = 0; i < Cards.Count; i++)
@@ -159,6 +191,11 @@ namespace MemoryGame.Controller
             Cards.Clear();
         }
 
+        /// <summary>
+        /// Picks a specified number of unique card IDs from the available set
+        /// </summary>
+        /// <param name="pairCount">Number of pairs (unique IDs) to pick</param>
+        /// <returns>List of IDs, with each ID appearing twice for pairing</returns>
         private List<string> PickIds(int pairCount)
         {
             var unique = new List<string>();
@@ -175,6 +212,12 @@ namespace MemoryGame.Controller
             return list;
         }
 
+        /// <summary>
+        /// Calculates an appropriate scale for cards based on grid dimensions
+        /// </summary>
+        /// <param name="rows">Number of rows in the grid</param>
+        /// <param name="cols">Number of columns in the grid</param>
+        /// <returns>Scale factor for cards</returns>
         private float CalculateCardScale(int rows, int cols)
         {
             // Base reference: 4x4 grid = scale 1.0, shrink when more cells
@@ -182,6 +225,15 @@ namespace MemoryGame.Controller
             return Mathf.Clamp(4f / maxDim, 0.4f, 1f);
         }
 
+        /// <summary>
+        /// Converts a linear index to a local position in the grid
+        /// </summary>
+        /// <param name="index">Linear index of the card</param>
+        /// <param name="rows">Number of rows in the grid</param>
+        /// <param name="cols">Number of columns in the grid</param>
+        /// <param name="dx">Horizontal spacing between cards</param>
+        /// <param name="dy">Vertical spacing between cards</param>
+        /// <returns>Local position for the card</returns>
         private static Vector3 IndexToLocal(int index, int rows, int cols, float dx, float dy)
         {
             int r = index / cols;
@@ -193,6 +245,11 @@ namespace MemoryGame.Controller
             return new Vector3(x, y, 0);
         }
 
+        /// <summary>
+        /// Shuffles a list in place using the Fisher-Yates shuffle algorithm
+        /// </summary>
+        /// <typeparam name="T">Type of elements in the list</typeparam>
+        /// <param name="list">List to shuffle</param>
         private static void Shuffle<T>(IList<T> list)
         {
             for (int i = list.Count - 1; i > 0; i--)

@@ -4,13 +4,18 @@ using MemoryGame.Config;
 using MemoryGame.Controller;
 using MemoryGame.Events;
 using UnityEngine;
+
 namespace MemoryGame.Services
 {
     /// <summary>
-    /// Service to handle matching logic between selected cards
+    /// Service to handle matching logic between selected cards in the memory game.
+    /// Manages card selection, determines matches, and handles game progression.
     /// </summary>
     public class MatchService : MonoBehaviour
     {
+        /// <summary>
+        /// Reference to the game configuration settings
+        /// </summary>
         [Header("Refs")]
         public GameConfig config;
 
@@ -31,6 +36,10 @@ namespace MemoryGame.Services
             GameEvents.OnRemainingPairsChanged -= OnRemainingPairsChanged;
         }
 
+        /// <summary>
+        /// Registers all cards in the current game for matching logic
+        /// </summary>
+        /// <param name="cards">Collection of card controllers to register</param>
         public void RegisterCards(IEnumerable<CardController> cards)
         {
             _allCards.Clear();
@@ -42,11 +51,19 @@ namespace MemoryGame.Services
             _remainingPairs = v;
         }
 
+        /// <summary>
+        /// Sets input enabled/disabled state for all registered cards
+        /// </summary>
+        /// <param name="enabled">True to enable input, false to disable</param>
         private void SetAllInput(bool enabled)
         {
             foreach (var c in _allCards) c.SetInput(enabled);
         }
 
+        /// <summary>
+        /// Handles card selection events from the game events system
+        /// </summary>
+        /// <param name="c">The card controller that was selected</param>
         private void OnCardSelected(CardController c)
         {
             if (_busy) return;
@@ -60,6 +77,10 @@ namespace MemoryGame.Services
             StartCoroutine(Resolve());
         }
 
+        /// <summary>
+        /// Coroutine that resolves the matching logic between two selected cards
+        /// </summary>
+        /// <returns>IEnumerator for coroutine execution</returns>
         private IEnumerator Resolve()
         {
             _busy = true;
@@ -67,14 +88,17 @@ namespace MemoryGame.Services
 
             yield return new WaitForSeconds(0.05f); // tiny buffer
 
+            // Check if the two selected cards match
             if (_first.Model.Id == _second.Model.Id)
             {
+                // Cards match - lock them and notify listeners
                 _first.Lock();
                 _second.Lock();
                 GameEvents.RaisePairMatched(_first, _second);
                 _remainingPairs--;
                 GameEvents.RaiseRemainingPairsChanged(_remainingPairs);
 
+                // Check if all pairs have been matched (game won)
                 if (_remainingPairs <= 0)
                 {
                     GameEvents.RaiseGameWon();
@@ -82,6 +106,7 @@ namespace MemoryGame.Services
             }
             else
             {
+                // Cards don't match - notify listeners and flip them back
                 GameEvents.RaisePairMismatched(_first, _second);
                 yield return new WaitForSeconds(Mathf.Max(0f, config != null ? config.mismatchHideDelay : 0.7f));
                 // Flip back
@@ -89,6 +114,7 @@ namespace MemoryGame.Services
                 yield return _second.StartCoroutine(_second.FlipRoutine(false));
             }
 
+            // Reset selection and re-enable input
             _first = _second = null;
             SetAllInput(true);
             _busy = false;
