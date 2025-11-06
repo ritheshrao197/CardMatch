@@ -40,9 +40,9 @@ namespace MemoryGame
         public MatchService matchService;
         public TimerService timerService;
         public LevelRules levelRules;
-        public ProgressService progress;   // optional
-        public UIFlow uiFlow;              // for result/home/hud visibility
-
+        public ProgressService progress;   
+        public UIFlow uiFlow;             
+        public BoardFrame frame;
         private BoardController _board;
         private ObjectPool<CardController> _pool;
         private int _levelIndex;
@@ -83,7 +83,7 @@ namespace MemoryGame
             }
 
             _pool = new ObjectPool<CardController>(cardPrefab, boardRoot, prewarm: 0);
-            _board = new BoardController(boardRoot, config, cardSet, _pool);
+            _board = new BoardController(boardRoot, config, cardSet, _pool,frame);
 
             _levelIndex = progress ? progress.GetCurrentLevelIndex() : 0;
 

@@ -30,7 +30,7 @@ namespace MemoryGame.Controller
         /// <param name="set">Card set containing available card faces</param>
         /// <param name="pool">Object pool for card controllers</param>
         /// <param name="frame">Optional board frame for layout constraints</param>
-        public BoardController(Transform root, GameConfig cfg, CardSet set, ObjectPool<CardController> pool, BoardFrame frame = null)
+        public BoardController(Transform root, GameConfig cfg, CardSet set, ObjectPool<CardController> pool, BoardFrame frame )
         {
             _root = root; _cfg = cfg; _set = set; _pool = pool; _frame = frame;
         }
@@ -72,10 +72,10 @@ namespace MemoryGame.Controller
                 }
             }
 
-            // === Layout inside BoardFrame (if provided), else fallback to old spacing ===
             if (_frame != null && _frame.HasBounds(out var inner))
             {
                 LayoutInsideRect(inner, rows, cols, ids);
+
             }
             else
             {
@@ -93,7 +93,12 @@ namespace MemoryGame.Controller
                     card.flipDuration = _cfg.flipDuration;
                 }
             }
-
+            if(_frame)
+            {
+                    float scale = CalculateFramecale(rows);
+                _frame.transform.localScale = Vector3.one * scale;
+                Debug.Log($"[BoardController] Layout with BoardFrame at scale {scale:F2}");
+            }
             GameEvents.RaiseRemainingPairsChanged(pairs);
         }
 
@@ -257,6 +262,40 @@ namespace MemoryGame.Controller
                 int j = Random.Range(0, i + 1);
                 (list[i], list[j]) = (list[j], list[i]);
             }
+        }
+        /// <summary>
+        /// Calculates an appropriate scale for cards based on grid dimensions using a dynamic formula.
+        /// This formula is designed to approximate the requested scaling factors (1.7 for 2x2, 0.85 for 4x4, 0.55 for 7x7)
+        /// while ensuring smooth scaling for all other grid sizes.
+        /// </summary>
+        /// <param name="rows">Number of rows in the grid</param>
+        /// <param name="cols">Number of columns in the grid</param>
+        /// <returns>Scale factor for cards</returns>
+        private float CalculateFramecale(int rowCount)
+        {
+
+            // Safety check: Avoid division by zero, though unlikely with grid dimensions
+            if (rowCount < 1)
+            {
+                return 1.0f; 
+            }
+
+            // Formula: S = 3.4 / (D + 0.1)
+            // This formula is specifically tuned to hit the requested scale points:
+            // D=2  -> 3.4 / 2.1  ~ 1.61 (Close to 1.7)
+            // D=4  -> 3.4 / 4.1  ~ 0.83 (Close to 0.85)
+            // D=7  -> 3.4 / 7.1  ~ 0.48 (Close to 0.55)
+            
+            // To hit 1.7 more accurately for small grids, we can adjust the numerator slightly:
+            // Let's use 3.5 / (D + 0.1) for better small-grid fit and clamp it.
+
+            // The divisor offset (0.1) prevents the scale from growing too fast for small dimensions.
+            float calculatedScale = 3.5f / (rowCount + 0.1f);
+
+            // Clamp the scale to a sensible range to prevent cards from becoming too large or too small.
+            // Max scale limit (e.g., 2.0) prevents huge cards on a 1x1 grid.
+            // Min scale limit (e.g., 0.2) ensures visibility on very large grids (e.g., 20x20).
+            return Mathf.Clamp(calculatedScale, 0.2f, 2.0f);
         }
     }
 }
