@@ -51,26 +51,33 @@ namespace MemoryGame.Views
         /// <param name="onHome">Action to perform when the home button is clicked</param>
         public void Bind(bool win, int levelIndex, string reason, Action onNext, Action onHome)
         {
+#if UNITY_EDITOR
             Debug.Log($"[ResultPopup] Bind called with win={win}, levelIndex={levelIndex}, reason={reason}");
+#endif
             _onNext = onNext; 
             _onHome = onHome;
             
+            // Update title text
             if (titleText) 
                 titleText.text = win ? "Level Complete" : "Level Failed";
                 
+            // Update subtitle text
             if (subtitleText)
                 subtitleText.text = win ? $"You finished Level {levelIndex + 1}"
                                         : (reason == "time" ? "Time's up" : "Move limit reached");
                                         
+            // Update next button text and listener
             if (nextButton) 
-                nextButton.GetComponentInChildren<TextMeshProUGUI>().text = win ? "Next" : "Retry";
-
-            if (nextButton) 
-            { 
+            {
+                var nextButtonText = nextButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (nextButtonText)
+                    nextButtonText.text = win ? "Next" : "Retry";
+                
                 nextButton.onClick.RemoveAllListeners(); 
                 nextButton.onClick.AddListener(() => _onNext?.Invoke()); 
             }
             
+            // Update home button listener
             if (homeButton) 
             { 
                 homeButton.onClick.RemoveAllListeners(); 
