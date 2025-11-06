@@ -3065,7 +3065,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.07586018, y: 0.0526719}
   m_AnchorMax: {x: 0.9386896, y: 0.88081515}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1004682357
@@ -3394,6 +3394,7 @@ MonoBehaviour:
   levelRules: {fileID: 2117312785}
   progress: {fileID: 2117312784}
   uiFlow: {fileID: 212988896}
+  frame: {fileID: 1926727269}
 --- !u!4 &1102392576
 Transform:
   m_ObjectHideFlags: 0
@@ -4679,7 +4680,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 25.067627, y: -27.284729}
+  m_AnchoredPosition: {x: 25.067627, y: -27.284668}
   m_SizeDelta: {x: -55.7625, y: -52.5377}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1704986494
