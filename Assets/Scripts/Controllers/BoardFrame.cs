@@ -1,4 +1,5 @@
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Controller
 {
@@ -19,14 +20,14 @@ namespace MemoryGame.Controller
         /// <summary>
         /// Padding (as a fraction of frame size) between the frame edge and the playable area.
         /// </summary>
-        [Range(0f, 0.5f)] 
-        public float innerPadding = 0.05f;
+        [Range(BoardFrameConstants.MinPadding, BoardFrameConstants.MaxPadding)] 
+        public float innerPadding = BoardFrameConstants.DefaultInnerPadding;
 
         /// <summary>
         /// Padding (as a fraction of frame size) between cards inside the frame.
         /// </summary>
-        [Range(0f, 0.5f)] 
-        public float cardPadding = 0.1f;
+        [Range(BoardFrameConstants.MinPadding, BoardFrameConstants.MaxPadding)] 
+        public float cardPadding = BoardFrameConstants.DefaultCardPadding;
 
         /// <summary>
         /// Automatically assigns the SpriteRenderer on this GameObject if not set.

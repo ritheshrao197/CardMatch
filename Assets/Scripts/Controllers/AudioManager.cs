@@ -2,6 +2,7 @@ using MemoryGame.Audio.Events;
 using MemoryGame.Events;
 using MemoryGame.UI.Events;
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Controller
 {
@@ -31,16 +32,16 @@ namespace MemoryGame.Controller
 
         // --- Volume Controls ---
         [Header("Volumes")]
-        [Range(0f, 1f)] public float sfxVolume = 1f;      // SFX volume
-        [Range(0f, 1f)] public float musicVolume = 0.75f; // Music volume
+        [Range(0f, 1f)] public float sfxVolume = AudioConstants.DefaultSfxVolume;      // SFX volume
+        [Range(0f, 1f)] public float musicVolume = AudioConstants.DefaultMusicVolume; // Music volume
 
         // --- Audio Sources ---
         private AudioSource _sfx;   // For SFX
         private AudioSource _music; // For music
 
         // --- PlayerPrefs Keys ---
-        private const string KEY_SFX   = "MG_SFX_ENABLED";
-        private const string KEY_MUSIC = "MG_MUSIC_ENABLED";
+        private const string KEY_SFX   = AudioConstants.SfxEnabledKey;
+        private const string KEY_MUSIC = AudioConstants.MusicEnabledKey;
         private bool _sfxEnabled;   // Is SFX enabled?
         private bool _musicEnabled; // Is music enabled?
 

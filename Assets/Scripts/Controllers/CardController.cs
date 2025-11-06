@@ -3,6 +3,7 @@ using MemoryGame.Events;
 using MemoryGame.Models;
 using MemoryGame.Views;
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Controller
 {
@@ -21,7 +22,7 @@ namespace MemoryGame.Controller
         /// <summary>
         /// Duration of the card flip animation in seconds
         /// </summary>
-        public float flipDuration = 0.25f;
+        public float flipDuration = CardConstants.DefaultFlipDuration;
 
         private readonly CardModel _model = new CardModel();
         private bool _inputEnabled = true;

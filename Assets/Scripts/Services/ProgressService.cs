@@ -1,4 +1,5 @@
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame
 {
@@ -11,7 +12,7 @@ namespace MemoryGame
         /// <summary>
         /// PlayerPrefs key for storing the highest level completed
         /// </summary>
-        private const string KEY = "MG_HIGHEST_LEVEL";
+        private const string KEY = ProgressConstants.HighestLevelKey;
 
         /// <summary>
         /// Gets the current level index the player should start at.

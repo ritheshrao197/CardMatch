@@ -1,4 +1,5 @@
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame
 {
@@ -34,18 +35,18 @@ namespace MemoryGame
         /// Target width in world units
         /// </summary>
         [Header("Target size in world units")]
-        public float targetWidth = 2f;
+        public float targetWidth = SpriteFitConstants.DefaultTargetWidth;
         
         /// <summary>
         /// Target height in world units
         /// </summary>
-        public float targetHeight = 2f;
+        public float targetHeight = SpriteFitConstants.DefaultTargetHeight;
 
         /// <summary>
         /// Whether to preserve the sprite's original aspect ratio
         /// </summary>
         [Header("Options")]
-        public bool preserveAspect = true;
+        public bool preserveAspect = SpriteFitConstants.DefaultPreserveAspect;
 
         SpriteRenderer _sr;
 

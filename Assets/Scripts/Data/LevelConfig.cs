@@ -19,9 +19,9 @@ namespace MemoryGame
         new LevelDef{ rows=3, cols=4 },                    // Level 5: 12 cards
         new LevelDef{ rows=4, cols=3 },                    // Level 6: 12 cards
         new LevelDef{ rows=4, cols=4 },                    // Level 7: 16 cards
-        new LevelDef{ rows=3, cols=6 },                    // Level 8: 18 cards
-        new LevelDef{ rows=4, cols=5 },                    // Level 9: 20 cards
-        new LevelDef{ rows=5, cols=4 },                    // Level 10: 20 cards
+        new LevelDef{ rows=4, cols=5 },                    // Level 8: 18 cards
+        new LevelDef{ rows=5, cols=5 },                    // Level 9: 20 cards
+        new LevelDef{ rows=5, cols=6 },                    // Level 10: 20 cards
 
         // Medium Levels (11-20)
         new LevelDef{ rows=4, cols=4, moveLimit=32 },      // Level 11: 16 cards, 32 moves

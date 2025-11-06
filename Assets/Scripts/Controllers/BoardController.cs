@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MemoryGame.Config;
 using MemoryGame.Events;
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Controller
 {
@@ -120,8 +121,8 @@ namespace MemoryGame.Controller
 
             // Dynamic extra padding for tighter grids (prevents edge bleed in 5×5+)
             // Effective padding = boardFrame.cardPadding + a small grid-based term
-            float gridPad = Mathf.Clamp01(0.012f * Mathf.Max(rows, cols));   // ~0.06 at 5x5
-            float pad = Mathf.Clamp01((_frame != null ? _frame.cardPadding : 0.1f) + gridPad);
+            float gridPad = Mathf.Clamp01(BoardConstants.GridPaddingFactor * Mathf.Max(rows, cols));   // ~0.06 at 5x5
+            float pad = Mathf.Clamp01((_frame != null ? _frame.cardPadding : BoardConstants.DefaultPadding) + gridPad);
 
             float boxW = cellW * (1f - pad);
             float boxH = cellH * (1f - pad);
@@ -181,7 +182,7 @@ namespace MemoryGame.Controller
                 }
             }
             // conservative default aspect (taller than wide)
-            return new Vector2(1f, 1.4f);
+            return new Vector2(BoardConstants.DefaultCardWidth, BoardConstants.DefaultCardHeight);
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace MemoryGame.Controller
             Cards.Clear();
         }
 
-        /// <summary>
+       /// <summary>
         /// Picks a specified number of unique card IDs from the available set
         /// </summary>
         /// <param name="pairCount">Number of pairs (unique IDs) to pick</param>
@@ -206,14 +207,22 @@ namespace MemoryGame.Controller
             var unique = new List<string>();
             var avail = new List<string>(_set.GetAllIds());
             Shuffle(avail);
+            
+            // 1. Pick the unique IDs
             for (int i = 0; i < pairCount && i < avail.Count; i++)
                 unique.Add(avail[i]);
 
+            // 2. Create the final list by adding each unique ID twice
             var list = new List<string>(pairCount * 2);
             foreach (var id in unique)
             {
                 list.Add(id); list.Add(id);
             }
+            
+            // FIX: Log the 'list' which contains the doubled pairs, not the 'unique' list.
+            // Note: The 'list' will be shuffled immediately after this method returns in Build().
+            Debug.Log($"[BoardController] Final Board IDs (pre-shuffle): {string.Join(", ", list)}");
+            
             return list;
         }
 
@@ -290,12 +299,12 @@ namespace MemoryGame.Controller
             // Let's use 3.5 / (D + 0.1) for better small-grid fit and clamp it.
 
             // The divisor offset (0.1) prevents the scale from growing too fast for small dimensions.
-            float calculatedScale = 3.5f / (rowCount + 0.1f);
+            float calculatedScale = BoardConstants.CardScaleNumerator / (rowCount + BoardConstants.CardScaleDivisorOffset);
 
             // Clamp the scale to a sensible range to prevent cards from becoming too large or too small.
             // Max scale limit (e.g., 2.0) prevents huge cards on a 1x1 grid.
             // Min scale limit (e.g., 0.2) ensures visibility on very large grids (e.g., 20x20).
-            return Mathf.Clamp(calculatedScale, 0.2f, 2.0f);
+            return Mathf.Clamp(calculatedScale, BoardConstants.MinCardScale, BoardConstants.MaxCardScale);
         }
     }
 }

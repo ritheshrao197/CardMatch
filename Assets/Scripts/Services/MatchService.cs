@@ -4,6 +4,7 @@ using MemoryGame.Config;
 using MemoryGame.Controller;
 using MemoryGame.Events;
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Services
 {
@@ -86,7 +87,7 @@ namespace MemoryGame.Services
             _busy = true;
             SetAllInput(false);
 
-            yield return new WaitForSeconds(0.05f); // tiny buffer
+            yield return new WaitForSeconds(MatchConstants.ResolveBufferDelay); // tiny buffer
 
             // Check if the two selected cards match
             if (_first.Model.Id == _second.Model.Id)
@@ -108,7 +109,7 @@ namespace MemoryGame.Services
             {
                 // Cards don't match - notify listeners and flip them back
                 GameEvents.RaisePairMismatched(_first, _second);
-                yield return new WaitForSeconds(Mathf.Max(0f, config != null ? config.mismatchHideDelay : 0.7f));
+                yield return new WaitForSeconds(Mathf.Max(0f, config != null ? config.mismatchHideDelay : MatchConstants.DefaultMismatchHideDelay));
                 // Flip back
                 yield return _first.StartCoroutine(_first.FlipRoutine(false));
                 yield return _second.StartCoroutine(_second.FlipRoutine(false));

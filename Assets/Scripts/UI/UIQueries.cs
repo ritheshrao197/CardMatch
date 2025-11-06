@@ -1,4 +1,5 @@
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Views
 {
@@ -11,7 +12,7 @@ namespace MemoryGame.Views
         /// <summary>
         /// PlayerPrefs key for storing the highest level completed
         /// </summary>
-        private const string KEY = "MG_HIGHEST_LEVEL";
+        private const string KEY = ProgressConstants.HighestLevelKey;
 
         /// <summary>
         /// Gets the number of unlocked levels based on player progress.

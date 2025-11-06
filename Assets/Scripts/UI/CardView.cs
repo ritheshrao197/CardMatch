@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using MemoryGame.Constants;
 
 namespace MemoryGame.Views
 {
@@ -43,14 +44,14 @@ namespace MemoryGame.Views
         /// <returns>IEnumerator for coroutine execution</returns>
         public IEnumerator AnimateFlip(bool faceUp, float duration, System.Action onComplete = null)
         {
-            float half = Mathf.Max(0.0001f, duration * 0.5f);
+            float half = Mathf.Max(CardViewConstants.HalfMinFlipScale, duration * 0.5f);
             float t = 0f;
             // First half: scale X down to 0
             while (t < half)
             {
                 t += Time.deltaTime;
                 float k = 1f - Mathf.Clamp01(t / half);
-                transform.localScale = new Vector3(Mathf.Max(0.0001f, k), 1f, 1f);
+                transform.localScale = new Vector3(Mathf.Max(CardViewConstants.MinFlipScale, k), 1f, 1f);
                 yield return null;
             }
 
@@ -67,7 +68,7 @@ namespace MemoryGame.Views
             {
                 t += Time.deltaTime;
                 float k = Mathf.Clamp01(t / half);
-                transform.localScale = new Vector3(Mathf.Max(0.0001f, k), 1f, 1f);
+                transform.localScale = new Vector3(Mathf.Max(CardViewConstants.MinFlipScale, k), 1f, 1f);
                 yield return null;
             }
             transform.localScale = Vector3.one;
