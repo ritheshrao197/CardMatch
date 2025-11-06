@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MemoryGame;
 using MemoryGame.Config;
 using MemoryGame.Events;
 using UnityEngine;
