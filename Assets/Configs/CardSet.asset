@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d80bd411df11b4a0e95b4da56a09e54f, type: 3}
+  m_Script: {fileID: 11500000, guid: eb10c3833e2f743b39cb098ef86fa9cc, type: 3}
   m_Name: CardSet
   m_EditorClassIdentifier: 
   faces:
@@ -111,5 +111,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e8a68fd17ce42174e9b24babd0ae6629, type: 3}
   - {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
   - {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
-  - {fileID: 21300000, guid: b066c869b51f9384fa8ac9cce36b4648, type: 3}
   - {fileID: 21300000, guid: b066c869b51f9384fa8ac9cce36b4648, type: 3}

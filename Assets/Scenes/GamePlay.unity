@@ -320,7 +320,7 @@ MonoBehaviour:
   content: {fileID: 886032474}
   levelButtonPrefab: {fileID: 8532228598200161258, guid: 522e4c33f0ba14ca7a4741fcc3457142, type: 3}
   closeButton: {fileID: 1125172343}
-  levelConfig: {fileID: 11400000, guid: 7cfad893a0ca34656a5f2e5fabe4a573, type: 2}
+  levelConfig: {fileID: 11400000, guid: 1a947f2364edb4c3d8218bdd88960def, type: 2}
 --- !u!1 &174990481
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,6 +3366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1102392576}
   - component: {fileID: 1102392575}
+  - component: {fileID: 1102392577}
   m_Layer: 0
   m_Name: GameBootstrap
   m_TagString: Untagged
@@ -3387,12 +3388,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 13e50b41e55094fdfb2c860f7a3edd26, type: 2}
   cardSet: {fileID: 11400000, guid: 88db87edd29ed41b5903cc9b2837e65f, type: 2}
-  levelConfig: {fileID: 11400000, guid: 7cfad893a0ca34656a5f2e5fabe4a573, type: 2}
+  levelConfig: {fileID: 11400000, guid: 1a947f2364edb4c3d8218bdd88960def, type: 2}
   boardRoot: {fileID: 1926727268}
   cardPrefab: {fileID: 7324629175315571263, guid: 621125fe092ce46c589dc8fcc7fa00f0, type: 3}
   matchService: {fileID: 2117312783}
   timerService: {fileID: 2117312781}
-  levelRules: {fileID: 2117312785}
+  levelRules: {fileID: 1102392577}
   progress: {fileID: 2117312784}
   uiFlow: {fileID: 212988896}
   frame: {fileID: 1926727269}
@@ -3411,6 +3412,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1102392577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102392573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b38a06bf0264b71a950bd34f0fd237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1125172342
 GameObject:
   m_ObjectHideFlags: 0
@@ -5231,7 +5244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flip: {fileID: 8300000, guid: b6428d4edb06344ba829da4edd9967c1, type: 3}
   match: {fileID: 8300000, guid: 7478151cf36724a7dada558f746c3633, type: 3}
-  mismatch: {fileID: 8300000, guid: dc6614beca09347ec9b258f12d154bdd, type: 3}
+  mismatch: {fileID: 8300000, guid: 79e6baad2fd414b82a6d49ce1568d2e5, type: 3}
   click: {fileID: 8300000, guid: 6e8772b49f34d402a90016ed445d8a2f, type: 3}
   popupOpen: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
   popupClose: {fileID: 8300000, guid: 6e8772b49f34d402a90016ed445d8a2f, type: 3}
@@ -5702,6 +5715,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171a26cb5add442e0a5b3771cc1a29de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moves: 0
+  _moveLimit: 0
+  _timeLimit: 0
+  _ended: 0
+  _timer: {fileID: 0}
 --- !u!114 &2117312786
 MonoBehaviour:
   m_ObjectHideFlags: 0
