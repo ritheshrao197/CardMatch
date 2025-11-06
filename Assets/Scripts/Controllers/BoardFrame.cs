@@ -1,7 +1,7 @@
 using UnityEngine;
+
 namespace MemoryGame.Controller
 {
-
     /// <summary>
     /// BoardFrame visually represents the outer frame of the card grid.
     /// Provides bounds and padding calculations for card layout.
@@ -10,7 +10,8 @@ namespace MemoryGame.Controller
     public class BoardFrame : MonoBehaviour
     {
         /// <summary>
-        /// Optional explicit reference to the SpriteRenderer. If not set, uses the SpriteRenderer on this GameObject.
+        /// Optional explicit reference to the SpriteRenderer. 
+        /// If not set, uses the SpriteRenderer on this GameObject.
         /// </summary>
         [Tooltip("Optional explicit reference; defaults to SpriteRenderer on this GameObject")]
         public SpriteRenderer frame;
@@ -18,15 +19,18 @@ namespace MemoryGame.Controller
         /// <summary>
         /// Padding (as a fraction of frame size) between the frame edge and the playable area.
         /// </summary>
-        [Range(0f, 0.5f)] public float innerPadding = 0.05f;
+        [Range(0f, 0.5f)] 
+        public float innerPadding = 0.05f;
 
         /// <summary>
         /// Padding (as a fraction of frame size) between cards inside the frame.
         /// </summary>
-        [Range(0f, 0.5f)] public float cardPadding = 0.1f;
+        [Range(0f, 0.5f)] 
+        public float cardPadding = 0.1f;
 
         /// <summary>
         /// Automatically assigns the SpriteRenderer on this GameObject if not set.
+        /// Called when the component is first added to a GameObject.
         /// </summary>
         void Reset() { frame = GetComponent<SpriteRenderer>(); }
 
@@ -47,5 +51,4 @@ namespace MemoryGame.Controller
             return true;
         }
     }
-
 }
