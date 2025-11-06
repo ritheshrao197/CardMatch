@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 4
   cols: 3
-  flipDuration: 0.25
-  mismatchHideDelay: 0.7
+  flipDuration: 0.2
+  mismatchHideDelay: 0.1
   cellX: 2.5
   cellY: 2.5

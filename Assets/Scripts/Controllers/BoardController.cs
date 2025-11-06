@@ -3,6 +3,7 @@ using MemoryGame.Config;
 using MemoryGame.Events;
 using UnityEngine;
 using MemoryGame.Constants;
+using System.Linq;
 
 namespace MemoryGame.Controller
 {
@@ -31,7 +32,7 @@ namespace MemoryGame.Controller
         /// <param name="set">Card set containing available card faces</param>
         /// <param name="pool">Object pool for card controllers</param>
         /// <param name="frame">Optional board frame for layout constraints</param>
-        public BoardController(Transform root, GameConfig cfg, CardSet set, ObjectPool<CardController> pool, BoardFrame frame )
+        public BoardController(Transform root, GameConfig cfg, CardSet set, ObjectPool<CardController> pool, BoardFrame frame)
         {
             _root = root; _cfg = cfg; _set = set; _pool = pool; _frame = frame;
         }
@@ -94,9 +95,9 @@ namespace MemoryGame.Controller
                     card.flipDuration = _cfg.flipDuration;
                 }
             }
-            if(_frame)
+            if (_frame)
             {
-                    float scale = CalculateFramecale(rows);
+                float scale = CalculateFramecale(rows);
                 _frame.transform.localScale = Vector3.one * scale;
                 Debug.Log($"[BoardController] Layout with BoardFrame at scale {scale:F2}");
             }
@@ -197,20 +198,27 @@ namespace MemoryGame.Controller
             Cards.Clear();
         }
 
-       /// <summary>
+        /// <summary>
         /// Picks a specified number of unique card IDs from the available set
         /// </summary>
         /// <param name="pairCount">Number of pairs (unique IDs) to pick</param>
         /// <returns>List of IDs, with each ID appearing twice for pairing</returns>
         private List<string> PickIds(int pairCount)
         {
-            var unique = new List<string>();
-            var avail = new List<string>(_set.GetAllIds());
-            Shuffle(avail);
-            
+            // FIX: Use Distinct() to ensure the source list contains only truly unique IDs.
+            // If _set.GetAllIds() accidentally returned duplicates (e.g., from multiple sources),
+            // this prevents those duplicates from being considered for the 'unique' list.
+            var uniqueSource = _set.GetAllIds().Distinct().ToList();
+
             // 1. Pick the unique IDs
-            for (int i = 0; i < pairCount && i < avail.Count; i++)
-                unique.Add(avail[i]);
+            var unique = new List<string>();
+
+            // Shuffle the unique source list before picking
+            Shuffle(uniqueSource);
+
+            // Pick the required number of pairs (unique IDs)
+            for (int i = 0; i < pairCount && i < uniqueSource.Count; i++)
+                unique.Add(uniqueSource[i]);
 
             // 2. Create the final list by adding each unique ID twice
             var list = new List<string>(pairCount * 2);
@@ -218,11 +226,9 @@ namespace MemoryGame.Controller
             {
                 list.Add(id); list.Add(id);
             }
-            
-            // FIX: Log the 'list' which contains the doubled pairs, not the 'unique' list.
-            // Note: The 'list' will be shuffled immediately after this method returns in Build().
+
             Debug.Log($"[BoardController] Final Board IDs (pre-shuffle): {string.Join(", ", list)}");
-            
+
             return list;
         }
 
@@ -286,7 +292,7 @@ namespace MemoryGame.Controller
             // Safety check: Avoid division by zero, though unlikely with grid dimensions
             if (rowCount < 1)
             {
-                return 1.0f; 
+                return 1.0f;
             }
 
             // Formula: S = 3.4 / (D + 0.1)
@@ -294,7 +300,7 @@ namespace MemoryGame.Controller
             // D=2  -> 3.4 / 2.1  ~ 1.61 (Close to 1.7)
             // D=4  -> 3.4 / 4.1  ~ 0.83 (Close to 0.85)
             // D=7  -> 3.4 / 7.1  ~ 0.48 (Close to 0.55)
-            
+
             // To hit 1.7 more accurately for small grids, we can adjust the numerator slightly:
             // Let's use 3.5 / (D + 0.1) for better small-grid fit and clamp it.
 
