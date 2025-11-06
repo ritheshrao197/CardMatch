@@ -6,16 +6,34 @@ using MemoryGame.Services;
 using MemoryGame.UI.Events;
 using MemoryGame.Views;
 using UnityEngine;
+
 namespace MemoryGame
 {
-
+    /// <summary>
+    /// Main game bootstrap class that initializes and manages the game flow.
+    /// Handles level progression, game state management, and coordination between services.
+    /// </summary>
     public class GameBootstrap : MonoBehaviour
     {
+        /// <summary>
+        /// Game configuration data
+        /// </summary>
         [Header("Data")]
         public GameConfig config;
+        
+        /// <summary>
+        /// Collection of card sprites used in the game
+        /// </summary>
         public CardSet cardSet;
+        
+        /// <summary>
+        /// Configuration data for all game levels
+        /// </summary>
         public LevelConfig levelConfig;
 
+        /// <summary>
+        /// References to scene objects and components
+        /// </summary>
         [Header("Scene Refs")]
         public Transform boardRoot;
         public CardController cardPrefab;
@@ -40,6 +58,7 @@ namespace MemoryGame
             UIEvents.OnResume += CmdResume;
             UIEvents.OnResetProgress += CmdResetProgress;
         }
+        
         private void OnDisable()
         {
             UIEvents.OnStartFromHome -= CmdStartFromHome;
@@ -52,6 +71,9 @@ namespace MemoryGame
             UIEvents.OnResetProgress -= CmdResetProgress;
         }
 
+        /// <summary>
+        /// Initializes the game on start
+        /// </summary>
         private void Start()
         {
             if (!config || !cardSet || !boardRoot || !cardPrefab || !levelConfig)
@@ -70,12 +92,17 @@ namespace MemoryGame
             GameEvents.OnGameWon += OnGameWon;
             GameEvents.OnGameLost += OnGameLost;
         }
+        
         private void OnDestroy()
         {
             GameEvents.OnGameWon -= OnGameWon;
             GameEvents.OnGameLost -= OnGameLost;
         }
 
+        /// <summary>
+        /// Starts a specific level by index
+        /// </summary>
+        /// <param name="index">Zero-based index of the level to start</param>
         private void StartLevel(int index)
         {
             Debug.Log($"[GameBootstrap] Starting Level {index + 1}");
@@ -101,6 +128,9 @@ namespace MemoryGame
             GameEvents.RaiseLevelStarted(def, _levelIndex);
         }
 
+        /// <summary>
+        /// Handles game won event
+        /// </summary>
         private void OnGameWon()
         {
             GameEvents.RaiseLevelCompleted(_levelIndex);
@@ -118,6 +148,10 @@ namespace MemoryGame
             else StartLevel(_levelIndex + 1);
         }
 
+        /// <summary>
+        /// Handles game lost event
+        /// </summary>
+        /// <param name="reason">Reason for losing the game</param>
         private void OnGameLost(string reason)
         {
             if (uiFlow)
@@ -130,13 +164,45 @@ namespace MemoryGame
         }
 
         // === UIEvents handlers ===
+        /// <summary>
+        /// Command handler for starting from home screen
+        /// </summary>
         void CmdStartFromHome() { var idx = progress ? progress.GetCurrentLevelIndex() : 0; StartLevel(idx); UIEvents.ShowHUD(); }
+        
+        /// <summary>
+        /// Command handler for starting a specific level
+        /// </summary>
+        /// <param name="index">Index of the level to start</param>
         void CmdStartLevel(int index) { StartLevel(index); UIEvents.ShowHUD(); }
+        
+        /// <summary>
+        /// Command handler for restarting the current level
+        /// </summary>
         void CmdRestart() => StartLevel(_levelIndex);
+        
+        /// <summary>
+        /// Command handler for returning to home screen
+        /// </summary>
         void CmdGoHome() { uiFlow?.ShowHome(); timerService?.StopTimer(); }
+        
+        /// <summary>
+        /// Command handler for showing the HUD
+        /// </summary>
         void CmdShowHUD() { uiFlow?.ShowGameHUD(); }
+        
+        /// <summary>
+        /// Command handler for pausing the game
+        /// </summary>
         void CmdPause() { timerService?.StopTimer(); uiFlow?.ShowPause(); }
+        
+        /// <summary>
+        /// Command handler for resuming the game
+        /// </summary>
         void CmdResume() { timerService?.StartTimer(); uiFlow?.HidePause(); }
+        
+        /// <summary>
+        /// Command handler for resetting player progress
+        /// </summary>
         void CmdResetProgress() { progress?.ResetProgress(); }
     }
 }
